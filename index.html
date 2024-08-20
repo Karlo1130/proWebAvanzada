@@ -6,7 +6,7 @@
     <title>Document</title>
     <style>
         canvas{
-            background-color: rgb(151, 122, 151);
+            background-color:purple;
         }
     </style>
 </head>
@@ -16,12 +16,46 @@
     <script>
         const my_canvas = document.getElementById('my_canvas')
         const ctx = my_canvas.getContext('2d')
-        ctx.fillStyle = "blue";
+
+        ctx.strokeRect(20,20,100,100)
+
+        ctx.fillStyle = "orange";
         ctx.fillRect(100,100,100,100)
-        ctx.fillStyle = "red";
+
+        ctx.fillStyle = "#ffffff";
         ctx.fillRect(180,180,100,100)
-        ctx.fillStyle = "pink";
+
+        ctx.fillStyle = "rgb(255, 255, 0, 0.5)";
         ctx.fillRect(260,260,100,100)
+
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = "red";
+        ctx.strokeRect(340,340,100,100)
+
+        ctx.beginPath()
+        ctx.moveTo(400,100)
+        ctx.lineTo(400,200)
+        ctx.closePath()
+        ctx.stroke()
+
+        ctx.beginPath()
+        ctx.moveTo(180,300)
+        ctx.lineTo(20,450)
+        ctx.lineTo(230,450)
+        ctx.closePath()
+        ctx.stroke()
+        ctx.fill()
+
+        ctx.beginPath();
+        ctx.arc(300, 75, 50, 0, 2 * Math.PI);
+        ctx.stroke();
+        ctx.fill()
+
+        ctx.strokeStyle = "blue";
+        ctx.beginPath();
+        ctx.arc(300, 90, 25, 0, Math.PI);
+        ctx.stroke();
+
     </script>
 </body>
 </html>
