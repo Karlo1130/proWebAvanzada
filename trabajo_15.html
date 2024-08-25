@@ -49,13 +49,13 @@
         my_canvas.addEventListener("mousemove", function(e){
             originColor = randomColor
 
-            ctx.fillStyle = originColor;
+            ctx.fillStyle = "black";
             ctx.beginPath();
             ctx.arc(e.x, e.y, 2, 0, 2 * Math.PI);
             ctx.stroke();
             ctx.fill()
 
-            ctx.fillStyle = originColor;
+            ctx.fillStyle = "#" + randomColor;
 
 
         })
