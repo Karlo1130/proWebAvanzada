@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        canvas{
+            background-color:gray;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="my_canvas" width="500" height="500"></canvas>
+
+    <script>
+        const my_canvas = document.getElementById('my_canvas')
+        const ctx = my_canvas.getContext('2d')
+
+        var flag = 0;
+        var randomColor;
+        var originColor;
+        var isMousePressed = false;
+        
+        my_canvas.addEventListener("click", function(e){
+            if (flag == 0) {
+                ctx.beginPath();
+                ctx.arc(e.x, e.y, 50, 0, 2 * Math.PI);
+                ctx.stroke();
+                ctx.fill()
+            } else if (flag == 1) {
+                ctx.strokeRect(e.x - 50, e.y - 50,100,100)
+                ctx.fillRect(e.x - 50, e.y - 50,100,100)
+            }
+        })
+
+        my_canvas.addEventListener("mouseover", function(e){
+            randomColor = Math.floor(Math.random()*16777215).toString(16)
+            ctx.fillStyle = "#" + randomColor;
+        })
+
+        my_canvas.addEventListener("mouseout", function(e){
+            if(flag == 0){
+                flag = 1
+            } else if(flag == 1){
+                flag = 0
+            }
+        })
+
+        my_canvas.addEventListener("mouseup", function(e){
+            isMousePressed = false;
+        })
+
+        my_canvas.addEventListener("mousedown", function(e){
+            isMousePressed = true;
+        })
+
+        my_canvas.addEventListener("mousemove", function(e) {
+            if(isMousePressed){
+                originColor = randomColor
+    
+                ctx.fillStyle = "black";
+                ctx.beginPath();
+                ctx.arc(e.x, e.y, 2, 0, 2 * Math.PI);
+                ctx.stroke();
+                ctx.fill()
+    
+                ctx.fillStyle = "#" + randomColor;
+            }
+        })
+
+    </script>
+</body>
+</html>
