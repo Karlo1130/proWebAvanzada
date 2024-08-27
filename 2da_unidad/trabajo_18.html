@@ -26,6 +26,9 @@
 
             ctx.strokeRect(x, y,100,100)
             ctx.fillRect(x, y,100,100)
+
+            ctx.font = "40px Georgia"
+            ctx.strokeText(e.key, x+50, y+50)
         })
 
         function randomCoords(min, max) {
