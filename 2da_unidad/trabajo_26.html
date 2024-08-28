@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        canvas{
+            background-color:gray;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="my_canvas" width="500" height="500"></canvas>
+
+    <script>
+        const my_canvas = document.getElementById('my_canvas')
+        const ctx = my_canvas.getContext('2d')
+        var x = 200
+        var y = 200
+        var direction = "";
+
+        document.addEventListener("keypress", function(e){
+
+            switch(e.keyCode){
+                case 97:
+                    direction = "left"
+                    break;
+                case 119:
+                    direction = "up"
+                    break;
+                case 100:
+                    direction = "right"
+                    break;
+                case 115:
+                    direction = "down"
+                    break;
+            }
+        })
+
+        
+        function randomCoords(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+        
+        function draw(){
+
+            ctx.fillStyle = "gray";
+            ctx.fillRect(0, 0,500,500)
+
+            randomColor = Math.floor(Math.random()*16777215).toString(16)
+            ctx.fillStyle = "#" + randomColor;
+
+            ctx.strokeRect(x, y,20,20)
+            ctx.fillRect(x, y,20,20)
+            
+            update()
+            requestAnimationFrame(draw)
+        }
+
+        function update(){
+            switch(direction){
+                case "left":
+                    x -= 5
+                    break;
+                case "up":
+                    y -= 5
+                    break;
+                case direction = "right":
+                    x += 5
+                    break;
+                case direction = "down":
+                    y += 5
+                    break;
+            }
+
+        }
+        
+        requestAnimationFrame(draw)
+
+        </script>
+</body>
+</html>
