@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        canvas{
+            background-color:gray;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="my_canvas" width="500" height="500"></canvas>
+
+    <script>
+        const my_canvas = document.getElementById('my_canvas')
+        const ctx = my_canvas.getContext('2d')
+        var x = 200
+        var y = 200
+
+        document.addEventListener("keypress", function(e){
+
+
+            ctx.fillStyle = "gray";
+            ctx.fillRect(0, 0,500,500)
+
+            randomColor = Math.floor(Math.random()*16777215).toString(16)
+            ctx.fillStyle = "#" + randomColor;
+
+            console.log(e.keyCode)
+
+            switch(e.keyCode){
+                case 97:
+                    x -= 20
+                    break;
+                case 119:
+                    y -= 20
+                    break;
+                case 100:
+                    x += 20
+                    break;
+                case 115:
+                    y += 20
+                    break;
+            }
+
+            ctx.strokeRect(x, y,100,100)
+            ctx.fillRect(x, y,100,100)
+
+            ctx.font = "40px Georgia"
+            ctx.strokeText(e.key, x+50, y+50)
+        })
+
+        function randomCoords(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+    </script>
+</body>
+</html>
