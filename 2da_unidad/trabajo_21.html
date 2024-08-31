@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        canvas{
+            background-color:gray;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="my_canvas" width="1000" height="1000"></canvas>
+
+    <script>
+        const my_canvas = document.getElementById('my_canvas')
+        const ctx = my_canvas.getContext('2d')
+
+        const skinColor = "brown";
+        const whiteColor = "white";
+        const greenColor = "green";
+        const bgColor = "gray";
+        const eyeColor = "black"
+
+        ctx.fillStyle = skinColor;
+        
+        //head
+        ctx.beginPath();
+        ctx.arc(500, 200, 60, 0, 2 * Math.PI);
+        ctx.fill();
+
+        ctx.fillStyle = whiteColor;
+
+        //eyes
+        ctx.beginPath();
+        ctx.arc(480, 190, 10, 0, 2 * Math.PI);
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(520, 190, 10, 0, 2 * Math.PI);
+        ctx.fill();
+
+        ctx.fillStyle = eyeColor;
+
+        ctx.beginPath();
+        ctx.arc(480, 190, 5, 0, 2 * Math.PI);
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(520, 190, 5, 0, 2 * Math.PI);
+        ctx.fill();
+
+        ctx.fillStyle = skinColor;
+
+        //neck
+        ctx.fillRect(470, 200, 60, 80);
+
+        ctx.strokeStyle = "black";
+
+        //nose
+        ctx.beginPath();
+        ctx.moveTo(500, 200);
+        ctx.lineTo(510, 215);
+        ctx.lineTo(500, 215);
+        ctx.stroke();
+
+        ctx.strokeStyle = 'red';
+
+        //mouth
+        ctx.beginPath();
+        ctx.arc(500, 220, 20, .8, .8 * Math.PI);
+        ctx.stroke();
+
+        ctx.fillStyle = whiteColor;
+
+        //chest
+        ctx.fillRect(400, 260, 200, 300);
+
+        ctx.fillStyle = skinColor;
+
+        //chest skin
+        ctx.beginPath();
+        ctx.moveTo(470, 260);
+        ctx.lineTo(530, 260);
+        ctx.lineTo(500, 400);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.fillStyle = whiteColor;
+
+        //left arm
+        ctx.beginPath();
+        ctx.moveTo(400, 360);
+        ctx.lineTo(400, 260);
+        ctx.lineTo(300, 450);
+        ctx.lineTo(460, 560);
+        ctx.lineTo(560, 560);
+        ctx.lineTo(365, 450);
+        ctx.closePath();
+        ctx.fill();
+
+        //right arm
+        ctx.beginPath();
+        ctx.moveTo(600, 360);
+        ctx.lineTo(600, 260);
+        ctx.lineTo(700, 450);
+        ctx.lineTo(540, 560);
+        ctx.lineTo(440, 560);
+        ctx.lineTo(635, 450);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.fillStyle = greenColor;
+        
+        //ribbon
+        ctx.fillRect(400, 530, 200, 30);
+
+        ctx.fillStyle = whiteColor;
+
+        //pants
+        ctx.fillRect(400, 560, 200, 300);
+
+        ctx.fillStyle = greenColor;
+
+        //ribbon tails
+        ctx.beginPath();
+        ctx.moveTo(600, 530);
+        ctx.lineTo(320, 600);
+        ctx.lineTo(380, 600);
+        ctx.lineTo(600, 540);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.moveTo(400, 530);
+        ctx.lineTo(680, 600);
+        ctx.lineTo(620, 600);
+        ctx.lineTo(400, 540);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.fillStyle = bgColor;
+
+        //legs
+        ctx.beginPath();
+        ctx.moveTo(500, 590);
+        ctx.lineTo(450, 860);
+        ctx.lineTo(550, 860);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.fillStyle = skinColor;
+
+        //feets
+        ctx.beginPath();
+        ctx.moveTo(400, 860);
+        ctx.lineTo(450, 860);
+        ctx.lineTo(450, 900);
+        ctx.lineTo(360, 900);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.moveTo(600, 860);
+        ctx.lineTo(550, 860);
+        ctx.lineTo(550, 900);
+        ctx.lineTo(650, 900);
+        ctx.closePath();
+        ctx.fill();
+
+    </script>
+</body>
+</html>
