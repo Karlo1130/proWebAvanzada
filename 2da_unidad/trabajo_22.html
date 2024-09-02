@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        canvas{
+            background-color:gray;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="my_canvas" width="800" height="650"></canvas>
+
+    <script>
+        const my_canvas = document.getElementById('my_canvas')
+        const ctx = my_canvas.getContext('2d')
+
+        const skyColor = "#ff9a57";
+        const sunColor = "#ffe76c";
+        const darkSideColor = "#ffb66c";
+        const lightSideColor = "#ffd46c";
+
+        ctx.fillStyle = skyColor;
+        
+        //sky
+        ctx.fillRect(0, 0, 1000, 1000);
+        
+        ctx.fillStyle = sunColor;
+
+        //sun
+        ctx.beginPath();
+        ctx.arc(830, 30, 180, 0, 2 * Math.PI);
+        ctx.fill();
+
+        ctx.fillStyle = darkSideColor
+
+        //shadows
+        ctx.beginPath();
+        ctx.moveTo(0, 650);
+        ctx.lineTo(0, 400);
+        ctx.lineTo(150, 250);
+        ctx.lineTo(420, 400);
+        ctx.lineTo(620, 290);
+        ctx.lineTo(800, 390);
+        ctx.lineTo(800, 650);
+        ctx.fill();
+
+        ctx.fillStyle = lightSideColor
+
+        //light side 1
+        ctx.beginPath();
+        ctx.moveTo(150, 250);
+        ctx.lineTo(420, 400);
+        ctx.lineTo(385, 625);
+        ctx.fill();
+
+        //light side 2
+        ctx.beginPath();
+        ctx.moveTo(620, 290);
+        ctx.lineTo(800, 390);
+        ctx.lineTo(800, 530);
+        ctx.fill();
+        
+
+    </script>
+</body>
+</html>
