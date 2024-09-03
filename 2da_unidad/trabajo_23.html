@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        canvas{
+            background-color:gray;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="my_canvas" width="640" height="360"></canvas>
+
+    <script>
+        const my_canvas = document.getElementById('my_canvas')
+        const ctx = my_canvas.getContext('2d')
+
+        const skyColor = "#b3eefe";
+        const soilColor = "#f8bfb7";
+        const soilColor2 = "#ee9280";
+
+        const greenColor = "#5bd06e";
+        const lightGreenColor = "#51db67";
+        const darkGreenColor = "#172c15";
+
+        const screwColor = "#e0e9eb";
+        const blockColor = "#fe9060";
+
+        const bgBlockColor1 = "#ffc3b8";
+        const bgBlockColor2 = "#84c0ff";
+        const bgBlockColor3 = "#51d96b";
+        
+        const blackColor = "#000000";
+
+
+        ctx.fillStyle = skyColor;
+        
+        //sky
+        ctx.fillRect(0, 0, 1000, 1000);
+
+        //oranges blocks
+        drawBlock(40, 160)
+        drawBlock(100, 40)
+        drawBlock(141, 40)
+        drawBlock(580, 80)
+        
+        //background blocks
+        drawBgBlock(bgBlockColor2, 222, 120, 120, 200)
+        drawBgBlock(bgBlockColor1, 142, 200, 120, 120)
+        drawBgBlock(bgBlockColor3, 542, 200, 400, 120)
+
+        ctx.fillStyle = greenColor;
+
+        //pipeline body
+        ctx.fillRect(426, 210, 70, 200);
+        ctx.strokeRect(426, 210, 70, 200);
+
+        //pipeline head
+        ctx.fillRect(420, 200, 82, 42);
+        ctx.strokeRect(420, 200, 82, 42);
+
+
+        ctx.fillStyle = soilColor;
+        ctx.strokeStyle = blackColor;
+        
+        //soil
+        ctx.fillRect(-10, 321, 660, 12)
+        ctx.strokeRect(-10, 321, 660, 12)
+    
+        ctx.fillStyle = soilColor2;
+
+        //soil under soil
+        ctx.fillRect(-10, 334, 660, 100)
+
+        //oranges blocks
+        function drawBlock(xPosition, yPosition) {
+            ctx.fillStyle = blockColor;
+            ctx.strokeStyle = blackColor;
+
+            ctx.fillRect(xPosition, yPosition, 40, 40);
+            ctx.strokeRect(xPosition, yPosition, 40, 40);
+        }
+
+        //background blocks
+        function drawBgBlock(color, xPosition, yPosition, width, height) {
+            ctx.fillStyle = color;
+            ctx.strokeStyle = blackColor;
+
+            ctx.fillRect(xPosition, yPosition, width, height);
+            ctx.strokeRect(xPosition, yPosition, width, height);
+
+            drawScrew(xPosition + 13, yPosition + 13);
+            drawScrew(xPosition + width - 13, yPosition + 13);
+            drawScrew(xPosition + 13, yPosition + height - 13);
+            drawScrew(xPosition + width - 13, yPosition + height - 13);
+
+            //shadow
+            ctx.fillStyle = blackColor, 
+            ctx.fillRect(xPosition + width, yPosition + 20, 20, height - 10);
+        }
+
+        //screws
+        function drawScrew(xPosition, yPosition) {
+            ctx.fillStyle = screwColor;
+
+            ctx.beginPath();
+            ctx.arc(xPosition, yPosition, 10, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(xPosition - 7, yPosition + 7);
+            ctx.lineTo(xPosition + 7, yPosition - 7);
+            ctx.stroke()
+        }
+
+    </script>
+</body>
+</html>
