@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        canvas{
+            background-color:gray;  
+        }
+    </style>
+</head>
+<body>
+    <canvas id="my_canvas" width="500" height="500"></canvas>
+
+    <script>
+        const my_canvas = document.getElementById('my_canvas')
+        const ctx = my_canvas.getContext('2d')
+        var direction = "";
+        var speed = 5
+
+        class Rectangulo {
+            constructor(speed, color, xPosition, yPosition, width, height){
+                this.speed = speed;
+                this.color = color;
+                this.xPosition = xPosition;
+                this.yPosition = yPosition;
+                this.width = width;
+                this.height = height;
+            }
+
+            calcArea(){
+                return true;
+            }
+
+            seTocan(otherPlayer){
+                if(this.xPosition < otherPlayer.xPosition + otherPlayer.width &&
+                   this.xPosition + this.width > otherPlayer.xPosition &&
+                   this.yPosition < otherPlayer.yPosition + otherPlayer.height &&
+                   this.yPosition + this.height > otherPlayer.yPosition)
+                   {  
+
+                    return true;
+
+                   }
+                
+                return false;
+            }
+        }
+
+        var player = new Rectangulo(5, "black", 200, 200, 20, 20)
+        var square = new Rectangulo(0, "white", 300, 300, 100, 100)
+        var wall = new Rectangulo(0, "red", 50, 50, 50, 400)
+        
+
+        document.addEventListener("keypress", function(e){
+
+            switch(e.keyCode){
+                case 97:
+                    direction = "left"
+                    break;
+                case 119:
+                    direction = "up"
+                    break;
+                case 100:
+                    direction = "right"
+                    break;
+                case 115:
+                    direction = "down"
+                    break;
+                case 32:
+                    speed += 5
+                    break;
+            }
+        })
+
+        
+        function randomCoords(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+        
+        function draw(){
+
+            
+            ctx.fillStyle = "gray";
+            ctx.fillRect(0, 0,500,500)
+
+            ctx.font = "20px Georgia";
+        
+            ctx.strokeText("velocidad: " + speed, 10, 40)
+
+            let randomColor = Math.floor(Math.random()*16777215).toString(16)
+            player.color = "#" + randomColor;
+
+            ctx.fillStyle = player.color
+
+            ctx.strokeRect(player.xPosition, player.yPosition, player.width, player.height)
+            ctx.fillRect(player.xPosition, player.yPosition, player.width, player.height)
+
+            ctx.fillStyle = square.color
+
+            ctx.strokeRect(square.xPosition, square.yPosition, square.width, square.height)
+            ctx.fillRect(square.xPosition, square.yPosition, square.width, square.height)
+            
+            ctx.fillStyle = wall.color
+
+            ctx.strokeRect(wall.xPosition, wall.yPosition, wall.width, wall.height)
+            ctx.fillRect(wall.xPosition, wall.yPosition, wall.width, wall.height)
+
+            update()
+            requestAnimationFrame(draw)
+        }
+
+        function update(){
+            switch(direction){
+                case "left":
+                    player.xPosition -= speed
+                    if(player.xPosition <= 0)
+                        player.xPosition += 500
+                    break;
+                case "up":
+                    player.yPosition -= speed
+                    if(player.yPosition <= 0)
+                        player.yPosition += 500
+                    break;
+                case direction = "right":
+                    player.xPosition += speed
+                    if(player.xPosition >= 500)
+                        player.xPosition -= 500
+                    break;
+                case direction = "down":
+                    player.yPosition += speed
+                    if(player.yPosition >= 500)
+                        player.yPosition -= 500
+                    break;
+            }
+
+            if(player.seTocan(square)){
+                square.xPosition = randomCoords(0, 400)
+                square.yPosition = randomCoords(0, 400)
+            }
+
+            if(player.seTocan(wall)){
+                switch(direction){
+                    case "left":
+                        player.xPosition += speed
+                        break;
+                    case "up":
+                        player.yPosition += speed
+                        break;
+                    case direction = "right":
+                        player.xPosition -= speed
+                        break;
+                    case direction = "down":
+                        player.yPosition -= speed
+                        break;
+                }
+            }
+
+        }
+        
+        requestAnimationFrame(draw)
+
+        </script>
+</body>
+</html>
