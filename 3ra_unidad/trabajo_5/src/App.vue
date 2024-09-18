@@ -4,65 +4,62 @@ import { ref } from "vue";
 const email = ref('')
 const password = ref('')
 
-</script>
+const hasAccess = ref(false);
+const user = ref(null)
 
-<script>
-export default {
-  data() {
-    return { users: 
-      [
-        {
-          name:"joel",
-          job:"driver"
-        },
-        {
-          name:"wade",
-          job:"doctor"
-        }
-      ] 
+const onSubmit = async () => {
+
+try {
+  const response = await fetch("/users.json");
+
+  if (!response.ok) {
+    throw new Error("Error al cargar el archivo JSON");
+  }
+  const json = await response.json();
+  json.forEach(u => {
+    console.log(u.email);
+    if(u.email === email.value){
+      if(u.password === password.value){
+        user.value = u;
+        hasAccess.value = true;
+      }
     }
-  },
-  methods: {
+  });
 
-    async onSubmit(email, password) {
-      console.log(email);
-      console.log(password);
-      console.log("hola");
-
-      // const response = await fetch("./assets/users.json");
-
-      // const json = await response.json();
-      // console.log(json);
-
-      const response = await fetch("users.json")
-      console.log(response);
-      
-      const json = await response.json();
-      console.log(json);
-    },
-  },
+  if(!hasAccess.value)(
+    alert('Acceso denegado, correo o contraseña incorrectos')
+  )
+  } catch (error) {
+  console.error(error);
+  }
 }
 </script>
 
+
 <template>
 
-  <form @subit.prevent=onSubmit>
-    <fieldset>
-      <label>
-        Correo:
-      </label>
-      <input v-model="email" type="email" placeholder="Correo" required name="">
-    </fieldset>
-
-    <fieldset>
-      <label>
-        Contraseña:
-      </label>
-      <input v-model="password" type="password" placeholder="Contraseña" required name="">
-    </fieldset>
+  <div v-if="!hasAccess">
+    <form @submit.prevent="onSubmit">
+      <fieldset>
+        <label>
+          Correo:
+        </label>
+        <input v-model="email" type="email" placeholder="Correo" required>
+      </fieldset>
   
-    <button @click="onSubmit(email, password)">Acceder</button>
-  </form>
+      <fieldset>
+        <label>
+          Contraseña:
+        </label>
+        <input v-model="password" type="password" placeholder="Contraseña" required>
+        <label>a@a.com</label>
+      </fieldset>
+    
+      <button type="submit">Acceder</button>
+  
+    </form>
+  </div>
 
+  <label v-else>Bienvenido {{ user.name }}</label>
 
 </template>
