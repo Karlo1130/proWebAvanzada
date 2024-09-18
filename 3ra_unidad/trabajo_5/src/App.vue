@@ -1,38 +1,52 @@
 <script setup>
-import { ref } from "vue";
+  import { ref, onMounted } from "vue";
 
-const email = ref('')
-const password = ref('')
+  const email = ref('')
+  const password = ref('')
 
-const hasAccess = ref(false);
-const user = ref(null)
+  const hasAccess = ref(false);
+  const user = ref(null)
+  const users = ref(null)
+  const usersPropertys = ref([])
 
-const onSubmit = async () => {
+  const onSubmit = async () => {
 
-try {
-  const response = await fetch("/users.json");
+    try {
+      const response = await fetch("/users.json");
 
-  if (!response.ok) {
-    throw new Error("Error al cargar el archivo JSON");
-  }
-  const json = await response.json();
-  json.forEach(u => {
-    console.log(u.email);
-    if(u.email === email.value){
-      if(u.password === password.value){
-        user.value = u;
-        hasAccess.value = true;
+      if (!response.ok) {
+        throw new Error("Error al cargar el archivo JSON");
       }
-    }
-  });
 
-  if(!hasAccess.value)(
-    alert('Acceso denegado, correo o contraseña incorrectos')
-  )
-  } catch (error) {
-  console.error(error);
+      const json = await response.json();
+
+      json.forEach(u => {
+        if(u.email === email.value){
+          if(u.password === password.value){
+            user.value = u;
+            hasAccess.value = true;
+
+            for(var i in user.value){
+              usersPropertys.value.push(i)
+            }
+
+            sessionStorage.setItem('user', JSON.stringify(u));
+          }
+        }
+      });
+
+      if(hasAccess.value){
+        users.value = json
+      }
+
+      if(!hasAccess.value){
+        alert('Acceso denegado, correo o contraseña incorrectos')
+      }
+    } catch (error) {
+    console.error(error);
+    }
   }
-}
+  
 </script>
 
 
@@ -52,7 +66,6 @@ try {
           Contraseña:
         </label>
         <input v-model="password" type="password" placeholder="Contraseña" required>
-        <label>a@a.com</label>
       </fieldset>
     
       <button type="submit">Acceder</button>
@@ -60,6 +73,24 @@ try {
     </form>
   </div>
 
-  <label v-else>Bienvenido {{ user.name }}</label>
+  <div v-else>
+
+    <table>
+      <tr>
+        <th v-for="property in usersPropertys" style="text-align: center; border-style: solid;">{{ property }}</th>
+        <th style="text-align: center; border-style: solid;">Modify button</th>
+        <th style="text-align: center; border-style: solid;">Delete button</th>
+
+      </tr>
+      <tr v-for="user in users">
+        <th v-for="property in usersPropertys" style="text-align: center; border-style: solid;">{{ user[property] }}</th>
+        <th style="text-align: center; border-style: solid;"><button>Modify</button></th>
+        <th style="text-align: center; border-style: solid;"><button>Delete</button></th>
+      </tr>
+      
+
+    </table>
+
+  </div>
 
 </template>
