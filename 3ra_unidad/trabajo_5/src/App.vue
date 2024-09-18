@@ -6,8 +6,18 @@
 
   const hasAccess = ref(false);
   const user = ref(null)
-  const users = ref(null)
+  const users = ref([])
   const usersPropertys = ref([])
+  const addNewUserForm = ref(false)
+
+  const newBalance = ref("")
+  const newPicture = ref("")
+  const newAge = ref("")
+  const newName = ref("")
+  const newGender = ref("")
+  const newCompany = ref("")
+  const newEmail = ref("")
+  const newPassword = ref("")
 
   const onSubmit = async () => {
 
@@ -46,6 +56,38 @@
     console.error(error);
     }
   }
+
+  const addNewUser = () => {
+
+    let newUser = {
+      
+      Balance : newBalance.value,
+      Picture : newPicture.value,
+      Age : newAge.value,
+      Name : newName.value,
+      Gender : newGender.value,
+      Company : newCompany.value,
+      Email : newEmail.value,
+      Password : newPassword.value
+
+    }
+
+    console.log(newUser);
+    console.log(users.value);
+    
+    
+
+    users.value.push(newUser)
+
+    newBalance.value = "";
+    newPicture.value = "";
+    newAge.value = "";
+    newName.value = "";
+    newGender.value = "";
+    newCompany.value = "";
+    newEmail.value = "";
+    newPassword.value = "";
+  }
   
 </script>
 
@@ -68,14 +110,16 @@
         <input v-model="password" type="password" placeholder="Contraseña" required>
       </fieldset>
     
-      <button type="submit">Acceder</button>
+      <button type="submit">Acceder</button>a@a.com
   
     </form>
   </div>
 
   <div v-else>
 
-    <table>
+    <button v-if="!addNewUserForm" @click="addNewUserForm = true">Add</button>
+
+    <table v-if="!addNewUserForm">
       <tr>
         <th v-for="property in usersPropertys" style="text-align: center; border-style: solid;">{{ property }}</th>
         <th style="text-align: center; border-style: solid;">Modify button</th>
@@ -83,13 +127,77 @@
 
       </tr>
       <tr v-for="user in users">
-        <th v-for="property in usersPropertys" style="text-align: center; border-style: solid;">{{ user[property] }}</th>
+        <th style="text-align: center; border-style: solid;">{{ user.name }}</th>
         <th style="text-align: center; border-style: solid;"><button>Modify</button></th>
         <th style="text-align: center; border-style: solid;"><button>Delete</button></th>
       </tr>
-      
 
     </table>
+
+    <div v-if="addNewUserForm" >
+      
+      <form @submit.prevent="addNewUser">
+        <fieldset>
+          <label>
+            balance:
+          </label>
+          <input v-model="newBalance" type="text" placeholder="" required>
+        </fieldset>
+    
+        <fieldset>
+          <label>
+            picture:
+          </label>
+          <input v-model="newPicture" type="text" placeholder="" required>
+        </fieldset>
+  
+        <fieldset>
+          <label>
+            age:
+          </label>
+          <input v-model="newAge" type="text" placeholder="" required>
+        </fieldset>
+  
+        <fieldset>
+          <label>
+            name:
+          </label>
+          <input v-model="newName" type="text" placeholder="" required>
+        </fieldset>
+  
+        <fieldset>
+          <label>
+            gender:
+          </label>
+          <input v-model="newGender" type="text" placeholder="" required>
+        </fieldset>
+  
+        <fieldset>
+          <label>
+            company:
+          </label>
+          <input v-model="newCompany" type="text" placeholder="" required>
+        </fieldset>
+  
+        <fieldset>
+          <label>
+            email:
+          </label>
+          <input v-model="newEmail" type="text" placeholder="" required>
+        </fieldset>
+  
+        <fieldset>
+          <label>
+            password:
+          </label>
+          <input v-model="newPassword" type="text" placeholder="" required>
+        </fieldset>
+      
+        <button type="submit">agregar</button>
+        
+      </form>
+      <button type="button" @click="addNewUserForm = false">regresar</button>
+    </div>
 
   </div>
 
