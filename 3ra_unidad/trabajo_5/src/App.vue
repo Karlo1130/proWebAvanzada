@@ -3,11 +3,13 @@
 
   const email = ref('');
   const password = ref('');
-  var hasAccess = ref(false);
+  const hasAccess = ref(false);
   const user = ref(null);
   const users = ref([]);
   const usersPropertys = ref([]);
   const addNewUserForm = ref(false);
+  const modifyUserForm = ref(false);
+  const userToModify = ref(null);
 
   const newBalance = ref("");
   const newPicture = ref("");
@@ -53,7 +55,6 @@
     }
   };
 
-  // Función para cargar usuarios si hay acceso
   const loadUsers = async () => {
 
     if(users.value.length == 0) {
@@ -115,6 +116,41 @@
 
     addNewUserForm.value = false;
   };
+
+  const selectUserToModify = (selectedUser) => {
+    userToModify.value = selectedUser;
+    newBalance.value = selectedUser.balance;
+    newPicture.value = selectedUser.picture;
+    newAge.value = selectedUser.age;
+    newName.value = selectedUser.name;
+    newGender.value = selectedUser.gender;
+    newCompany.value = selectedUser.company;
+    newEmail.value = selectedUser.email;
+    newPassword.value = selectedUser.password;
+    modifyUserForm.value = true;
+  };
+
+  const modifyUser = () => {
+    if (userToModify.value) {
+      userToModify.value.balance = newBalance.value;
+      userToModify.value.picture = newPicture.value;
+      userToModify.value.age = newAge.value;
+      userToModify.value.name = newName.value;
+      userToModify.value.gender = newGender.value;
+      userToModify.value.company = newCompany.value;
+      userToModify.value.email = newEmail.value;
+      userToModify.value.password = newPassword.value;
+
+      modifyUserForm.value = false;
+    }
+  };
+
+  const deleteUser = (selectedUser) => {
+    const index = users.value.indexOf(selectedUser);
+    if (index > -1) {
+      users.value.splice(index, 1); 
+    }
+  }
 </script>
 
 <template>
@@ -135,18 +171,19 @@
   </div>
 
   <div v-else>
-    <button v-if="!addNewUserForm" @click="addNewUserForm = true">Add</button>
+    <button v-if="!addNewUserForm && !modifyUserForm" @click="addNewUserForm = true">Add</button>
 
-    <table v-if="!addNewUserForm">
+    <table v-if="!addNewUserForm && !modifyUserForm">
       <tr>
         <th v-for="property in usersPropertys" style="text-align: center; border-style: solid;">{{ property }}</th>
         <th style="text-align: center; border-style: solid;">Modify button</th>
-        <th style="text-align: center; border-style: solid;">Delete button</th>
       </tr>
       <tr v-for="user in users" :key="user.Email">
         <td v-for="property in usersPropertys" style="text-align: center; border-style: solid;">{{ user[property] }}</td>
-        <td style="text-align: center; border-style: solid;"><button>Modify</button></td>
-        <td style="text-align: center; border-style: solid;"><button>Delete</button></td>
+        <td style="text-align: center; border-style: solid;">
+          <button @click="selectUserToModify(user)">Modify</button>
+          <button @click="deleteUser(user)">Delete</button>
+        </td>
       </tr>
     </table>
 
@@ -196,5 +233,49 @@
       </form>
       <button type="button" @click="addNewUserForm = false">Regresar</button>
     </div>
+
+    <form v-if="modifyUserForm" @submit.prevent="modifyUser">
+        <fieldset>
+          <label>balance:</label>
+          <input v-model="newBalance" type="text" required>
+        </fieldset>
+
+        <fieldset>
+          <label>picture:</label>
+          <input v-model="newPicture" type="text" required>
+        </fieldset>
+
+        <fieldset>
+          <label>age:</label>
+          <input v-model="newAge" type="text" required>
+        </fieldset>
+
+        <fieldset>
+          <label>name:</label>
+          <input v-model="newName" type="text" required>
+        </fieldset>
+
+        <fieldset>
+          <label>gender:</label>
+          <input v-model="newGender" type="text" required>
+        </fieldset>
+
+        <fieldset>
+          <label>company:</label>
+          <input v-model="newCompany" type="text" required>
+        </fieldset>
+
+        <fieldset>
+          <label>email:</label>
+          <input v-model="newEmail" type="email" required>
+        </fieldset>
+
+        <fieldset>
+          <label>password:</label>
+          <input v-model="newPassword" type="text" required>
+        </fieldset>
+
+        <button type="submit">update</button>
+      </form>
   </div>
 </template>
