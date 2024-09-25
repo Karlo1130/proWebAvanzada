@@ -1,281 +1,202 @@
 <script setup>
   import { ref, onMounted } from "vue";
 
-  const email = ref('');
+  const username = ref('');
   const password = ref('');
   const hasAccess = ref(false);
-  const user = ref(null);
-  const users = ref([]);
-  const usersPropertys = ref([]);
-  const addNewUserForm = ref(false);
-  const modifyUserForm = ref(false);
-  const userToModify = ref(null);
-
-  const newBalance = ref("");
-  const newPicture = ref("");
-  const newAge = ref("");
-  const newName = ref("");
-  const newGender = ref("");
-  const newCompany = ref("");
-  const newEmail = ref("");
-  const newPassword = ref("");
+  const movies = ref(null)
+  const movieDetails = ref(null)
+  const isMovieDetails = ref(false)
+  const selectedValue = ref(null)
 
   // Función para manejar el login
   const onSubmit = async () => {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5YTZiZDFhOTcyM2EzY2VhMDI2YTllMjUyMDQ2YjMxNiIsIm5iZiI6MTcyNzIyOTY5MC43OTM1OTQsInN1YiI6IjY2ZjJmNWYwYTk3ODgwMTQ4ZjNiOTBiNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.fZfgCHZz_ePmrG_w_m4-p4_wbnkBfoUD1N1DKRDDMh4");
+
+    const raw = JSON.stringify({
+      "username": username.value,
+      "password": password.value,
+      "request_token": ""
+    });
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
+    };
+
     try {
-      const response = await fetch("/users.json");
-
-      if (!response.ok) {
-        throw new Error("Error al cargar el archivo JSON");
-      }
-
-      const json = await response.json();
-
-      json.forEach(u => {
-        if (u.email === email.value) {
-          if (u.password === password.value) {
-            user.value = u;
-            hasAccess.value = true;
-  
+      fetch("https://api.themoviedb.org/3/authentication/token/validate_with_login", requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+          if (result.success) {
             sessionStorage.setItem('user', JSON.stringify({
-              name: u.name,
-              email: u.email
-            }));
-
-            loadUsers();
+              username : username.value,
+              password : password.value
+            }))
+  
+            hasAccess.value = true;
+            if (!hasAccess.value) {
+              alert('Acceso denegado, correo o contraseña incorrectos');
+            }
           }
-        }
-      });
-
-      if (!hasAccess.value) {
-        alert('Acceso denegado, correo o contraseña incorrectos');
-      }
+        })
+      
     } catch (error) {
-      console.error(error);
+      
     }
+
+
   };
 
-  const loadUsers = async () => {
-
-    if(users.value.length == 0) {
-      try {
-        const response = await fetch("/users.json");
-  
-        if (!response.ok) {
-          throw new Error("Error al cargar el archivo JSON");
-        }
-  
-        const json = await response.json();
-  
-        users.value = json;
-  
-        usersPropertys.value = Object.keys(users.value[0]);
-      } catch (error) {
-        console.error(error);
-      }
-      console.log(users.value); 
-
-    }
-    
-  };
 
   onMounted(() => {
 
-    const sessionUser = sessionStorage.getItem('user');
-    if (sessionUser) {
-      
-      hasAccess.value = true;
-      loadUsers();
-    }
-  });
-
-  const saveNewUser = () => {
-    let newUser = {
-      balance: newBalance.value,
-      picture: newPicture.value,
-      age: newAge.value,
-      name: newName.value,
-      gender: newGender.value,
-      company: newCompany.value,
-      email: newEmail.value,
-      password: newPassword.value
+    const requestOptions = {
+      method: "GET",
+      redirect: "follow"
     };
 
-    users.value.push(newUser);
-    console.log(users.value);
-    
+    fetch("https://api.themoviedb.org/3/discover/movie?api_key=9a6bd1a9723a3cea026a9e252046b316", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        movies.value = result.results
+      })
+      .catch((error) => console.error(error));
 
-    newBalance.value = "";
-    newPicture.value = "";
-    newAge.value = "";
-    newName.value = "";
-    newGender.value = "";
-    newCompany.value = "";
-    newEmail.value = "";
-    newPassword.value = "";
-
-    addNewUserForm.value = false;
-  };
-
-  const selectUserToModify = (selectedUser) => {
-    userToModify.value = selectedUser;
-    newBalance.value = selectedUser.balance;
-    newPicture.value = selectedUser.picture;
-    newAge.value = selectedUser.age;
-    newName.value = selectedUser.name;
-    newGender.value = selectedUser.gender;
-    newCompany.value = selectedUser.company;
-    newEmail.value = selectedUser.email;
-    newPassword.value = selectedUser.password;
-    modifyUserForm.value = true;
-  };
-
-  const modifyUser = () => {
-    if (userToModify.value) {
-      userToModify.value.balance = newBalance.value;
-      userToModify.value.picture = newPicture.value;
-      userToModify.value.age = newAge.value;
-      userToModify.value.name = newName.value;
-      userToModify.value.gender = newGender.value;
-      userToModify.value.company = newCompany.value;
-      userToModify.value.email = newEmail.value;
-      userToModify.value.password = newPassword.value;
-
-      modifyUserForm.value = false;
+    const sessionUser = sessionStorage.getItem('user');
+    if (sessionUser) {
+      hasAccess.value = true;
     }
-  };
 
-  const deleteUser = (selectedUser) => {
-    const index = users.value.indexOf(selectedUser);
-    if (index > -1) {
-      users.value.splice(index, 1); 
+  });
+
+  const seeMovieDetails = async (movieId) => {
+
+    try {
+      const requestOptions = {
+        method: "GET",
+        redirect: "follow"
+      };
+  
+      fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=9a6bd1a9723a3cea026a9e252046b316`, requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+          movieDetails.value = result
+
+          if (movieDetails.value) {
+            isMovieDetails.value = true;
+          }
+
+        })
+        .catch((error) => console.error(error));
+      
+    } catch (error) {
+      console.error(error);
+    }
+
+    
+  }
+
+  const rateMovie = (rate) => {
+     try {
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5YTZiZDFhOTcyM2EzY2VhMDI2YTllMjUyMDQ2YjMxNiIsIm5iZiI6MTcyNzIyOTY5MC43OTM1OTQsInN1YiI6IjY2ZjJmNWYwYTk3ODgwMTQ4ZjNiOTBiNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.fZfgCHZz_ePmrG_w_m4-p4_wbnkBfoUD1N1DKRDDMh4");
+
+      const raw = JSON.stringify({
+        "value": rate
+      });
+
+      const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow"
+      };
+
+      fetch(`https://api.themoviedb.org/3/movie/${movieDetails.value.id}/rating`, requestOptions)
+        .then((response) => response.text())
+        .then((result) => console.log(result))
+        .catch((error) => console.error(error));
+
+     } catch (error) {
+      console.error(error)
+     }
+  }
+
+  const deleteRate = () => {
+    try {
+      const myHeaders = new Headers();
+      myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5YTZiZDFhOTcyM2EzY2VhMDI2YTllMjUyMDQ2YjMxNiIsIm5iZiI6MTcyNzIyOTY5MC43OTM1OTQsInN1YiI6IjY2ZjJmNWYwYTk3ODgwMTQ4ZjNiOTBiNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.fZfgCHZz_ePmrG_w_m4-p4_wbnkBfoUD1N1DKRDDMh4");
+
+      const requestOptions = {
+        method: "DELETE",
+        headers: myHeaders,
+        redirect: "follow"
+      };
+
+      fetch(`https://api.themoviedb.org/3/movie/${movieDetails.value.id}/rating`, requestOptions)
+        .then((response) => response.text())
+        .then((result) => console.log(result))
+        .catch((error) => console.error(error));
+
+    } catch (error) {
+      console.error(error)
     }
   }
+
 </script>
 
 <template>
   <div v-if="!hasAccess">
     <form @submit.prevent="onSubmit">
       <fieldset>
-        <label>Correo:</label>
-        <input v-model="email" type="email" placeholder="Correo" required value="a@a.com">
+        <label>Nombre:</label>
+        <input v-model="username" type="text" placeholder="nombre" required value="karlo1130">
       </fieldset>
 
       <fieldset>
         <label>Contraseña:</label>
-        <input v-model="password" type="password" placeholder="Contraseña" required value="12345">
+        <input v-model="password" type="password" placeholder="Contraseña" required value="karlod1130">
       </fieldset>
 
       <button type="submit">Acceder</button>
     </form>
   </div>
 
-  <div v-else>
-    <button v-if="!addNewUserForm && !modifyUserForm" @click="addNewUserForm = true">Add</button>
+  <div v-if="hasAccess && !isMovieDetails">
 
-    <table v-if="!addNewUserForm && !modifyUserForm">
-      <tr>
-        <th v-for="property in usersPropertys" style="text-align: center; border-style: solid;">{{ property }}</th>
-        <th style="text-align: center; border-style: solid;">Modify button</th>
-      </tr>
-      <tr v-for="user in users" :key="user.Email">
-        <td v-for="property in usersPropertys" style="text-align: center; border-style: solid;">{{ user[property] }}</td>
-        <td style="text-align: center; border-style: solid;">
-          <button @click="selectUserToModify(user)">Modify</button>
-          <button @click="deleteUser(user)">Delete</button>
-        </td>
-      </tr>
-    </table>
-
-    <div v-if="addNewUserForm">
-      <form @submit.prevent="saveNewUser">
-        <fieldset>
-          <label>balance:</label>
-          <input v-model="newBalance" type="text" required>
-        </fieldset>
-
-        <fieldset>
-          <label>picture:</label>
-          <input v-model="newPicture" type="text" required>
-        </fieldset>
-
-        <fieldset>
-          <label>age:</label>
-          <input v-model="newAge" type="text" required>
-        </fieldset>
-
-        <fieldset>
-          <label>name:</label>
-          <input v-model="newName" type="text" required>
-        </fieldset>
-
-        <fieldset>
-          <label>gender:</label>
-          <input v-model="newGender" type="text" required>
-        </fieldset>
-
-        <fieldset>
-          <label>company:</label>
-          <input v-model="newCompany" type="text" required>
-        </fieldset>
-
-        <fieldset>
-          <label>email:</label>
-          <input v-model="newEmail" type="email" required>
-        </fieldset>
-
-        <fieldset>
-          <label>password:</label>
-          <input v-model="newPassword" type="text" required>
-        </fieldset>
-
-        <button type="submit">Agregar</button>
-      </form>
-      <button type="button" @click="addNewUserForm = false">Regresar</button>
+    <div v-for="movie in movies" class="card">
+      <div class="card-body">
+        <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path">
+        <h5 class="card-title">{{ movie.title }}</h5>
+        <p class="card-text">{{ movie.overview }}</p>
+        <button @click="seeMovieDetails(movie.id)" type="button" class="btn btn-primary">More details</button>
+      </div>
     </div>
 
-    <form v-if="modifyUserForm" @submit.prevent="modifyUser">
-        <fieldset>
-          <label>balance:</label>
-          <input v-model="newBalance" type="text" required>
-        </fieldset>
+  </div>
 
-        <fieldset>
-          <label>picture:</label>
-          <input v-model="newPicture" type="text" required>
-        </fieldset>
-
-        <fieldset>
-          <label>age:</label>
-          <input v-model="newAge" type="text" required>
-        </fieldset>
-
-        <fieldset>
-          <label>name:</label>
-          <input v-model="newName" type="text" required>
-        </fieldset>
-
-        <fieldset>
-          <label>gender:</label>
-          <input v-model="newGender" type="text" required>
-        </fieldset>
-
-        <fieldset>
-          <label>company:</label>
-          <input v-model="newCompany" type="text" required>
-        </fieldset>
-
-        <fieldset>
-          <label>email:</label>
-          <input v-model="newEmail" type="email" required>
-        </fieldset>
-
-        <fieldset>
-          <label>password:</label>
-          <input v-model="newPassword" type="text" required>
-        </fieldset>
-
-        <button type="submit">update</button>
-      </form>
+  <div v-if="isMovieDetails">
+    <h1>{{ movieDetails.title }}</h1>
+    <h3>{{ movieDetails.tagline }}</h3>
+    <img :src="'https://image.tmdb.org/t/p/w500' + movieDetails.poster_path">
+    <h3>Vote average</h3>
+    <h3>{{ movieDetails.vote_average }}</h3>
+    <h4>Rate the movie:</h4>
+    <form>
+      <div v-for="n in 10">
+        <input type="radio" v-model="selectedValue" :value="n">
+        <label >{{ n }}</label>
+      </div>
+      
+      <button type="button" @click="rateMovie(selectedValue)">Rate movie</button>
+      <button type="button" @click="deleteRate()">Delete rate</button>
+      <button type="button" @click="isMovieDetails = false">Return</button>
+    </form>
   </div>
 </template>
