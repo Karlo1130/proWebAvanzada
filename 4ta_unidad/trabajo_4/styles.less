@@ -1,0 +1,15 @@
+@colors: red, blue, yellow, green, gray;
+
+body {
+    background-color: violet;
+}
+
+.loop(@index, @limit) when (@index <= @limit) {
+   .color-@{index} {
+     background-color: extract(@colors, @index);
+   }
+ 
+   .loop((@index + 1), @limit);
+ }
+ 
+.loop(1, 5);
