@@ -42,10 +42,8 @@
             if(isset($response)){
                 $response = json_decode($response, true);
 
-                $data = $response->data;
-
-                $id = $data->id;
-                echo $id;
+                $data = $response['data'];
+                $id = $data['id'];
 
                 session_start();
 
@@ -53,6 +51,7 @@
                 $_SESSION['id'] = $id;
 
                 header("Location: ../home.php");
+                // header("Location: getProducts.php");
             }
 
         }

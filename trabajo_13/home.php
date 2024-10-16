@@ -1,3 +1,39 @@
+<?php
+
+  session_start();
+
+  if(!isset($_SESSION['data'])){
+    header("Location: index.php");
+    exit;
+}
+
+  $data = $_SESSION['data'];
+
+  $curl = curl_init();
+
+  curl_setopt_array($curl, array(
+  CURLOPT_URL => 'https://crud.jonathansoto.mx/api/products',
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => '',
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 0,
+  CURLOPT_FOLLOWLOCATION => true,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => 'GET',
+  CURLOPT_HTTPHEADER => array(
+      'Authorization: Bearer '.$data['token']),
+  ));
+
+  $response = curl_exec($curl);
+
+  curl_close($curl);
+
+  $response = json_decode($response, true);
+  $data = $response['data'];
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -71,32 +107,16 @@
   <main class="container-fluid d-flex">
 
     <div class="row p-3 g-3">
-      <div class="card p-1 m-2" style="width: 18rem;">
-        <img class="card-img-top" src="https://ui-avatars.com/api/?name=jhon+dani" alt="Card image cap">
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href="details.html" class="btn btn-primary">Go somewhere</a>
+      <?php foreach ($data as $tarjeta): ?>
+        <div class="card p-1 m-2" style="width: 18rem;">
+          <img class="card-img-top" src="<?php echo $tarjeta['cover']; ?>" alt="Card image cap">
+          <div class="card-body">
+            <h5 class="card-title"><?php echo $tarjeta['name']; ?></h5>
+            <p class="card-text"><?php echo $tarjeta['description']; ?></p>
+            <a href="details.html" class="btn btn-primary">Go somewhere</a>
+          </div>
         </div>
-      </div>
-  
-      <div class="card p-1 m-2" style="width: 18rem;">
-        <img class="card-img-top" src="https://ui-avatars.com/api/?name=jhon+dani" alt="Card image cap">
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href="details.html" class="btn btn-primary">Go somewhere</a>
-        </div>
-      </div>
-  
-      <div class="card p-1 m-2" style="width: 18rem;">
-        <img class="card-img-top" src="https://ui-avatars.com/api/?name=jhon+dani" alt="Card image cap">
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href="details.html" class="btn btn-primary">Go somewhere</a>
-        </div>
-      </div>
+      <?php endforeach; ?>
     </div>
 
   </main>
