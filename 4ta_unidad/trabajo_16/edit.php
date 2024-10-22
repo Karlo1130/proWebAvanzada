@@ -1,14 +1,18 @@
 <?php
-	include "app/productController.php";
+    session_start();
 	
-	if(!isset($_GET['slug'])){
+	if(!isset($_SESSION['data'])){
 		header("Location: index.php");
 		exit;
 	}
 
-	$productController = new ProductController();
+    if(isset($_GET['slug'])){
+        $slug = $_GET['slug'];
+    } else{
+		header("Location: index.php");
+		exit;
+	}
 
-	$data = $productController->getProductBySlug();
 ?>
 
 <!DOCTYPE html>
@@ -130,89 +134,44 @@
 					  </div>
 					</nav>
 
+          <main class="container-fluid d-flex">
 
-					<main class="container-fluid">
-                        <div class="card">
-                            <div class="card-header">
-                                <?php echo $data->name ?>
-                            </div>
-                            <div class="card-body d-flex flex-column flex-md-row">
-                                <section class="flex-shrink-0">
-                                    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-                                        <div class="carousel-inner">
-                                          <div class="carousel-item active">
-                                            <img class="d-block w-100" src="<?php echo $data->cover ?>" alt="First slide">
-                                          </div>
-                                          <div class="carousel-item">
-                                            <img class="d-block w-100" src="<?php echo $data->cover ?>" alt="Second slide">
-                                          </div>
-                                          <div class="carousel-item">
-                                            <img class="d-block w-100" src="<?php echo $data->cover ?>" alt="Third slide">
-                                          </div>
-                                        </div>
-                                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-                                          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                          <span class="visually-hidden">Previous</span>
-                                        </button>
-                                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-                                          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                          <span class="visually-hidden">Next</span>
-                                        </button>
-                                      </div>
-                                </section>
-                                <section class="p-3">
-                                    <h5 class="card-title"><?php echo $data->slug ?></h5>
-                                    <p class="card-text"><?php echo $data->description ?></p>
-                                    <a href="details.html" class="btn btn-primary">Go somewhere</a>
-                                </section>
-                            </div>
-                        </div>
-                    
-                        <div class="card">
-                            <h5 class="card-header">detalles</h5>
-                            <div class="card-body">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Brand</th>
-                                            <th>tags</th>
-                                            <th>categories</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td><?php echo $data->brand->name ?></td>
-                                            <td><?php echo $data->tags[0]->name ?></td>
-                                            <td><?php echo $data->categories[0]->name ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td>1</td>
-                                            <td><?php echo $data->brand->description ?></td>
-											<td><?php echo $data->tags[1]->name ?></td>
-                                            <td><?php echo $data->categories[0]->description ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td>1</td>
-                                            <td><?php echo $data->brand->slug ?></td>
-											<td><?php echo $data->tags[2]->name ?></td>
-                                            <td><?php echo $data->categories[0]->slug ?></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    
-                      </main>
+            <form method="PUT" action="" class="p-3">
+                <?php
+                    echo $slug;
+                ?>
+                <h5>Name</h5>
+                <input type="text" class="form-control" required name="name">
+                
+                <h5>slug</h5>
+                <input type="text" class="form-control" required name="slug">
+                
+                <h5>Description</h5>
+                <input type="text" class="form-control" required name="description">
+
+                <h5>Features</h5>
+                <input type="text" class="form-control" required name="features">
+
+                <h5>Brand id</h5>
+                <input type="text" class="form-control" required name="brand_id">
+
+                <h5>Id</h5>
+                <input type="text" class="form-control" required name="id">
+
+                <h5>Categories</h5>
+                <input type="text" class="form-control" required name="categories">
+
+                <h5>Tags</h5>
+                <input type="text" class="form-control" required name="tags">
+
+                <button class="btn btn-primary mt-3" type="submit">Confirm</a>
+            </form>
+
+          </main>
 
 	 			</div>
 	 		</div>
 	 	</div>
-		
-
-		
-
 
 	</div>
 	

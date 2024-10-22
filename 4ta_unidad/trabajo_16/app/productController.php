@@ -1,13 +1,6 @@
 <?php
 
-    session_start();
-
-    if(!isset($_SESSION['data'])){
-        header("Location: index.php");
-        exit;
-    }
-
-    $productController = new ProductController();
+    session_start(); 
 
     class ProductController{
         function getProducts() : array {
@@ -40,11 +33,6 @@
         }
 
         function getProductBySlug() : object {
-
-            if(!isset($_GET['slug'])){
-                header("Location: index.php");
-                exit;
-            }
 
             $data = $_SESSION['data'];
 
