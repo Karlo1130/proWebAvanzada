@@ -21,7 +21,7 @@
             <input type="text" class="form-control" required name="features">
             
             <h5>Brand</h5>
-            <select class="form-control" required name="brand">
+            <select class="form-control" required name="brand_id">
 
               <?php foreach($brands as $brand): ?>
                 <option value="<?php echo $brand['id']; ?>"><?php echo $brand['name']; ?></option>

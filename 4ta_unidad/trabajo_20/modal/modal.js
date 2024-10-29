@@ -12,11 +12,15 @@ if (editProductModal) {
         const descriptionInput = editProductModal.querySelector('.description')
         const featuresInput = editProductModal.querySelector('.features')
         const idInput = editProductModal.querySelector('.id')
+        const brandInput = editProductModal.querySelector('.brand_id')
 
         nameInput.value = recipient[0]
         slugInput.value = recipient[1]
         descriptionInput.value = recipient[2]
         featuresInput.value = recipient[3]
         idInput.value = recipient[4]
+        brandInput.value = recipient[5]
+        console.log(brandInput.value);
+        
     })
 }

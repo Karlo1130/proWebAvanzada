@@ -186,7 +186,7 @@ $brands = $brandController->getBrands();
 											<!-- <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#<?php //echo $idModal 
 																															?>">Edit</button> -->
 											<button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editProductModal"
-												data-bs-whatever='<?php echo $tarjeta['name'] . '|' . $tarjeta['slug'] . '|' . $tarjeta['description'] . '|' . $tarjeta['features'] . '|' . $tarjeta['id']; ?>'>
+												data-bs-whatever='<?php echo $tarjeta['name'] . '|' . $tarjeta['slug'] . '|' . $tarjeta['description'] . '|' . $tarjeta['features'] . '|' . $tarjeta['id'] . '|' . $tarjeta['brand_id']; ?>'>
 												Edit
 											</button>
 											<button class="btn btn-danger" onclick="alert(<?php echo $tarjeta['id'] ?>)">Delete</button>

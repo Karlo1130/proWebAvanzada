@@ -15,6 +15,7 @@
                 $slug = $_POST["slug"];
                 $description = $_POST["description"];
                 $features = $_POST["features"];
+                $brand_id = $_POST["brand_id"];
                 
                 $sessionData = $_SESSION['data'];
 
@@ -29,7 +30,7 @@
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS => array('name' => $name,'slug' => $slug,'description' => $description,'features' => $features,'brand' => $brand_id),
+                CURLOPT_POSTFIELDS => array('name' => $name,'slug' => $slug,'description' => $description,'features' => $features,'brand_id' => $brand_id),
                 CURLOPT_HTTPHEADER => array(
                     'Authorization: Bearer '.$sessionData['token']),
                 ));
@@ -57,7 +58,8 @@
                 $description = $_POST["description"];
                 $features = $_POST["features"];
                 $id = $_POST["id"];
-                
+                $brand_id = $_POST["brand_id"];
+
                 $sessionData = $_SESSION['data'];
 
                 $curl = curl_init();
@@ -77,7 +79,7 @@
                     'description' => $description,
                     'features' => $features,
                     'id' => $id,
-                    'brand' => $brand_id,
+                    'brand_id' => $brand_id,
                 )),
                 CURLOPT_HTTPHEADER => array(
                     'Content-Type: application/x-www-form-urlencoded',
