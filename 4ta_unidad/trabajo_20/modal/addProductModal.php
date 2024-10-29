@@ -7,7 +7,7 @@
       </div>
       <div class="modal-body">
         <div class="p-5 d-flex flex-column gap-3">
-          <form method="POST" action="app/productController.php" class="p-3">
+          <form method="POST" action="app/productController.php" class="p-3" enctype="multipart/form-data">
             <h5>Name</h5>
             <input type="text" class="form-control" required name="name">
             
@@ -28,7 +28,12 @@
 							<?php endforeach; ?>
 
             </select>
+
+            <h5>Cover</h5>
+            <input type="file" class="form-control" required name="cover">
+
             <button class="btn btn-primary mt-3" type="submit">Confirm</a>
+            
 
             <input type="hidden" name="action" value="addProduct">
           </form>

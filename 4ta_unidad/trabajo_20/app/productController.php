@@ -16,6 +16,9 @@
                 $description = $_POST["description"];
                 $features = $_POST["features"];
                 $brand_id = $_POST["brand_id"];
+                $cover = $_FILES["cover"]["tmp_name"];
+
+                var_dump($_FILES);
                 
                 $sessionData = $_SESSION['data'];
 
@@ -30,7 +33,7 @@
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS => array('name' => $name,'slug' => $slug,'description' => $description,'features' => $features,'brand_id' => $brand_id),
+                CURLOPT_POSTFIELDS => array('name' => $name,'slug' => $slug,'description' => $description,'features' => $features,'brand_id' => $brand_id,'cover'=> new CURLFILE($cover)),
                 CURLOPT_HTTPHEADER => array(
                     'Authorization: Bearer '.$sessionData['token']),
                 ));
