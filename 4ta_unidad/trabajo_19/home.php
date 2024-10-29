@@ -7,8 +7,6 @@ if (!isset($_SESSION['data'])) {
 	exit;
 }
 
-$productController = new ProductController();
-
 $data = $productController->getProducts();
 
 ?>
@@ -192,9 +190,10 @@ $data = $productController->getProducts();
 											<button class="btn btn-danger" onclick="alert(<?php echo $tarjeta['id'] ?>)">Delete</button>
 											
 											
-											<form method="POST" action="app/productController.php" id="buttonIdHidden">
+											<form method="POST" action="app/productController.php" id="deleteForm">
 			
-												<input type="hidden" name="buttonIdHidden" value="buttonIdHidden" id="buttonIdHidden">
+												<input type="hidden" name="action" value="deleteProduct">
+												<input type="hidden" name="productId" id="productIdHidden">
                 							</form>
 										</div>
 									</div>
@@ -230,10 +229,10 @@ $data = $productController->getProducts();
 				}).then((result) => {
 				if (result.isConfirmed) {
 					
-					document.getElementById("valueIdHidden").value = productId
-					document.getElementById("buttonIdHidden").submit
-					console.log("hola");
+					console.log('lol');
 					
+					document.getElementById("productIdHidden").value = productId
+					document.getElementById("deleteForm").submit()	
 
 					Swal.fire({
 					title: "Deleted!",

@@ -6,8 +6,6 @@
 		exit;
 	}
 
-	$productController = new ProductController();
-
 	$data = $productController->getProductBySlug();
 ?>
 

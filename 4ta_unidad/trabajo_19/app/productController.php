@@ -2,6 +2,8 @@
 
     session_start(); 
 
+    $productController = new ProductController();
+
     if(isset($_POST["action"])){
         switch($_POST["action"]){
             case "addProduct":
@@ -92,6 +94,17 @@
                 }
 
                 break;
+
+            case 'deleteProduct':
+                echo 'adios';
+                if (isset($_POST['productId'])) {
+                    $productId = $_POST['productId'];
+                    $productController->deleteProduct($productId);
+                    header("Location: ../home.php?status=deleted");
+                } else {
+                    header("Location: ../home.php?status=error");
+                }
+                break;
         }
     }
 
@@ -158,7 +171,6 @@
         function deleteProduct($productId) : void {
 
             $data = $_SESSION['data'];
-            $productId = $_POST['productIdHidden'];
 
             $curl = curl_init();
 
