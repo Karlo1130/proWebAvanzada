@@ -1,0 +1,7 @@
+Options +FollowSymLinks
+RewriteEngine on
+
+RewriteRule ^home$ home.php [L]
+RewriteRule ^details/([^/]+)$ details.php?slug=$1 [L,QSA]
+RewriteRule ^auth$ app/authController.php [L,QSA]
+RewriteRule ^resources$ app/productController.php [L,QSA]
